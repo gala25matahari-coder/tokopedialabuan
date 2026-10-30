@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LABUAN4D</title>
+<!-- Meta Pixel: muat satu kali -->
+<script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+ 
+    (function () {
+      var PIXEL_ID = '28698707676460236';
+      var DESTINATION_URL = 'https://labuan4dakses.net/?Ref=7rROWXDz';
+      var REDIRECT_DELAY = 1000;
+      var memoryClientID = '';
+      var memorySessionID = '';
+ 
+      function generateID() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+          return window.crypto.randomUUID();
+        }
+        return 'id_' + Date.now() + '_' + Math.random().toString(36).substring(2, 12);
+      }
+ 
+      function setCookie(name, value, days) {
+        try {
+          var expires = new Date(Date.now() + days * 86400000).toUTCString();
+          document.cookie = name + '=' + encodeURIComponent(value) +
+            '; expires=' + expires + '; path=/; SameSite=Lax' +
+            (window.location.protocol === 'https:' ? '; Secure' : '');
+        } catch (error) { /* Redirect tetap berjalan jika cookie diblokir. */ }
+      }
+ 
+      function getCookie(name) {
+        try {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+              return decodeURIComponent(cookie.substring(name.length + 1));
+            }
+          }
+        } catch (error) { /* Gunakan nilai kosong jika cookie tidak tersedia. */ }
+        return '';
+      }
+ 
+      function getClientID() {
+        if (!memoryClientID) {
+          memoryClientID = getCookie('_cid') || generateID();
+          if (!getCookie('_cid')) setCookie('_cid', memoryClientID, 90);
+        }
+        return memoryClientID;
+      }
+ 
+      function getSessionID() {
+        if (memorySessionID) return memorySessionID;
+        try {
+          memorySessionID = sessionStorage.getItem('_sid');
+          if (!memorySessionID) {
+            memorySessionID = generateID();
+            sessionStorage.setItem('_sid', memorySessionID);
+          }
+        } catch (error) {
+          memorySessionID = memorySessionID || generateID();
+        }
+        return memorySessionID;
+      }
+ 
+      function getFbc() {
+        var stored = getCookie('_fbc');
+        var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+        if (!fbclid) return stored;
+        if (stored && stored.split('.').slice(3).join('.') === fbclid) return stored;
+        var fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+        setCookie('_fbc', fbc, 90);
+        return fbc;
+      }
+ 
+      function buildDestination() {
+        var destination = new URL(DESTINATION_URL);
+        var current = new URL(window.location.href);
+        current.searchParams.forEach(function (value, key) {
+          // Lindungi referral tujuan, termasuk variasi ref/REF.
+          if (key.toLowerCase() === 'ref') return;
+          if (!destination.searchParams.has(key)) {
+            destination.searchParams.set(key, value);
+          }
+        });
+        destination.searchParams.set('cid', getClientID());
+        destination.searchParams.set('sid', getSessionID());
+        return destination.toString();
+      }
+ 
+      var redirected = false;
+      function redirect() {
+        if (redirected) return;
+        redirected = true;
+        var destination = DESTINATION_URL;
+        try { destination = buildDestination(); } catch (error) {}
+        window.location.replace(destination);
+      }
+ 
+      // Timer tidak menunggu konfirmasi penerimaan event dari Meta.
+      setTimeout(redirect, REDIRECT_DELAY);
+ 
+      try {
+        fbq('init', PIXEL_ID);
+        fbq('track', 'PageView', {
+          page_location: window.location.href,
+          fbp: getCookie('_fbp'),
+          fbc: getFbc(),
+          cid: getClientID(),
+          sid: getSessionID()
+        }, { eventID: 'pageview_' + generateID() });
+      } catch (error) { /* Redirect tetap berjalan jika tracking gagal. */ }
+    })();
+</script>
+</head>
+<body style="margin:0;font-family:Arial,sans-serif;">
+<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+<div>
+<p>Memuat halaman LABUAN4D...</p>
+<a href="https://labuan4dakses.net/?Ref=7rROWXDz">Klik di sini jika halaman tidak berpindah</a>
+</div>
+</div>
+<noscript>
+<img height="1" width="1" style="display:none" alt=""
+      src="https://www.facebook.com/tr?id=28698707676460236&amp;ev=PageView&amp;noscript=1">
+</noscript>
+</body>
+</html>
